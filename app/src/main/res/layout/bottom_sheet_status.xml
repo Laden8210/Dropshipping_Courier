@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Package Status"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioReceived"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Received"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/radioInTransit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="In Transit"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/radioOutForDelivery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Out for Delivery"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/radioDelivered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delivered"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioButton
+            android:id="@+id/radioReturned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Returned"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnConfirmStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="@color/white"/>
+</LinearLayout>

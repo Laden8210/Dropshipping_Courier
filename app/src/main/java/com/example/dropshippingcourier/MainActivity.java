@@ -291,8 +291,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e("JSON ERROR", "Error creating JSON", e);
         }
 
-        adapter.notifyDataSetChanged();
-        filterParcelsByStatus(currentStatus);
+//        adapter.notifyDataSetChanged();
+        //filterParcelsByStatus(currentStatus);
     }
     private boolean checkLocationPermission() {
         return ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)

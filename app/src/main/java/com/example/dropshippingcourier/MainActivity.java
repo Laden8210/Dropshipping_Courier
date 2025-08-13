@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 //        setupChipGroup();
 //        setupRecyclerView();
 //        setupSwipeRefresh();
-        setupScanButton();
+            setupScanButton();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -209,8 +209,10 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
+                        Log.d("LOCATION", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
                         createScanJson(barcode, status, location);
                     } else {
+                        Log.d("LOCATION", "No last known location found, requesting new location");
                         requestNewLocation(barcode, status);
                     }
                 });
@@ -280,13 +282,13 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onPostError(String errorMessage) {
-                    Log.e("MainActivity", "Post error: " + errorMessage);
+                    Log.e("POST ERROR", "Post error: " + errorMessage);
                     Toast.makeText(MainActivity.this, "Failed to update scan", Toast.LENGTH_SHORT).show();
                 }
             }, "error message", "courier/save_shippping_status.php").execute(jsonObject);
 
         } catch (Exception e) {
-            Log.e("MainActivity", "Error creating JSON", e);
+            Log.e("JSON ERROR", "Error creating JSON", e);
         }
 
         adapter.notifyDataSetChanged();

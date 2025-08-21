@@ -17,11 +17,11 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
     public ParcelAdapter(List<Parcel> items) {
         this.items = items;
     }
+
     public void updateList(List<Parcel> newList) {
         items = newList;
         notifyDataSetChanged();
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,23 +32,32 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Parcel item = items.get(position); // Use existing 'items' list
+        Parcel item = items.get(position);
 
         // Bind data to views
         holder.tvTrackingNumber.setText(item.getTrackingNumber());
-        holder.tvStatus.setText(item.getStatus());
-        holder.tvScanTime.setText(item.getScanTime());
+
+        // Format status for display
+        String displayStatus = formatStatus(item.getStatus());
+        holder.tvStatus.setText(displayStatus);
+
+        holder.tvScanTime.setText(formatDateTime(item.getScanTime()));
         holder.tvStoreName.setText(item.getStoreName());
         holder.tvStoreAddress.setText(item.getStoreAddress());
         holder.tvCustomerName.setText(item.getCustomerName());
         holder.tvCustomerAddress.setText(item.getCustomerAddress());
         holder.tvEstimatedDelivery.setText(item.getEstimatedDelivery());
-        holder.tvParcelDetails.setText(item.getItemCount() + " items, " + item.getWeight());
+
+        // Format parcel details with product info
+        String parcelDetails = formatParcelDetails(item);
+        holder.tvParcelDetails.setText(parcelDetails);
 
         // Update status background color
         int statusColor = getStatusColor(item.getStatus());
         GradientDrawable statusBg = (GradientDrawable) holder.tvStatus.getBackground().mutate();
         statusBg.setColor(statusColor);
+
+        // Set up accordion click listener
         holder.accordionHeader.setOnClickListener(v -> {
             if (holder.eventsContainer.getVisibility() == View.VISIBLE) {
                 holder.eventsContainer.setVisibility(View.GONE);
@@ -61,9 +70,12 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
         });
 
         // Set latest event
-        if (item.getScanEvents() != null && !item.getScanEvents().isEmpty()) {
-            ScanEvent latest = item.getScanEvents().get(0);
-            holder.tvLatestEvent.setText(latest.getLocation() + ", " + latest.getTime());
+        List<ScanEvent> scanEvents = item.getScanEvents();
+        if (scanEvents != null && !scanEvents.isEmpty()) {
+            ScanEvent latest = scanEvents.get(0);
+            holder.tvLatestEvent.setText(latest.getLocation() + ", " + formatDateTime(latest.getTime()));
+        } else {
+            holder.tvLatestEvent.setText("No tracking information available");
         }
     }
 
@@ -76,7 +88,24 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
         // Clear existing views
         holder.eventsContainer.removeAllViews();
 
-        // Skip first event since it's already shown in the header
+        if (events == null || events.isEmpty()) {
+            // Show no events message
+            LayoutInflater inflater = LayoutInflater.from(holder.itemView.getContext());
+            View eventView = inflater.inflate(R.layout.item_scan_event, holder.eventsContainer, false);
+
+            TextView tvTime = eventView.findViewById(R.id.tv_event_time);
+            TextView tvLocation = eventView.findViewById(R.id.tv_event_location);
+            TextView tvDescription = eventView.findViewById(R.id.tv_event_description);
+
+            tvTime.setText("--");
+            tvLocation.setText("No tracking data");
+            tvDescription.setText("No additional information available");
+
+            holder.eventsContainer.addView(eventView);
+            return;
+        }
+
+        // Skip first event since it's already shown in the header, show others
         for (int i = 1; i < events.size(); i++) {
             ScanEvent event = events.get(i);
 
@@ -87,7 +116,7 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
             TextView tvLocation = eventView.findViewById(R.id.tv_event_location);
             TextView tvDescription = eventView.findViewById(R.id.tv_event_description);
 
-            tvTime.setText(event.getTime());
+            tvTime.setText(formatDateTime(event.getTime()));
             tvLocation.setText(event.getLocation());
             tvDescription.setText(event.getDescription());
 
@@ -96,8 +125,12 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
     }
 
     private int getStatusColor(String status) {
-        switch (status.toLowerCase()) {
+        if (status == null) return Color.parseColor("#9E9E9E");
+
+        switch (status.toLowerCase().trim()) {
             case "pending": return Color.parseColor("#FF9800");
+            case "processing": return Color.parseColor("#2196F3");
+            case "shipped": return Color.parseColor("#FF5722");
             case "in transit": return Color.parseColor("#2196F3");
             case "out for delivery": return Color.parseColor("#FF5722");
             case "delivered": return Color.parseColor("#4CAF50");
@@ -105,7 +138,45 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
         }
     }
 
+    private String formatStatus(String status) {
+        if (status == null || status.isEmpty()) {
+            return "UNKNOWN";
+        }
+        return status.toUpperCase().replace("_", " ");
+    }
 
+    private String formatDateTime(String dateTime) {
+        if (dateTime == null || dateTime.isEmpty()) {
+            return "N/A";
+        }
+        // Simple formatting - you might want to use SimpleDateFormat for better formatting
+        try {
+            // Assuming format is "2025-07-30 00:02:57"
+            return dateTime.replace(" ", " at ");
+        } catch (Exception e) {
+            return dateTime; // Return as-is if formatting fails
+        }
+    }
+
+    private String formatParcelDetails(Parcel parcel) {
+        StringBuilder details = new StringBuilder();
+
+        // Add item count
+        int itemCount = parcel.getItemCount();
+        details.append(itemCount).append(" item").append(itemCount != 1 ? "s" : "");
+
+        // Add total amount if available
+        if (parcel.getTotalAmount() != null && !parcel.getTotalAmount().equals("0.00")) {
+            details.append(", ₱").append(parcel.getTotalAmount());
+        }
+
+        // Add weight if available
+        if (parcel.getWeight() != null && !parcel.getWeight().equals("N/A")) {
+            details.append(", ").append(parcel.getWeight());
+        }
+
+        return details.toString();
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView tvTrackingNumber;
@@ -120,8 +191,6 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
         final LinearLayout eventsContainer, accordionHeader;
         final TextView tvLatestEvent;
         final ImageView ivExpandCollapse;
-
-
 
         ViewHolder(View view) {
             super(view);
@@ -139,8 +208,6 @@ public class ParcelAdapter extends RecyclerView.Adapter<ParcelAdapter.ViewHolder
             accordionHeader = view.findViewById(R.id.accordion_header);
             tvLatestEvent = view.findViewById(R.id.tv_latest_event);
             ivExpandCollapse = view.findViewById(R.id.iv_expand_collapse);
-
-
         }
     }
 }

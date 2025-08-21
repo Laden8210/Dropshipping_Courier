@@ -5,115 +5,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardElevation="6dp"
+    app:cardCornerRadius="12dp"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- Header Section -->
+        <!-- Header Section with improved spacing -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/tv_tracking_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                tools:text="TRK-789456123"/>
-
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:background="@drawable/status_background"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:textAllCaps="true"
-                tools:text="OUT FOR DELIVERY"/>
-        </LinearLayout>
-
-        <!-- Store Details -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="4dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_store"
-                android:layout_marginEnd="8dp"/>
+            android:paddingBottom="16dp">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_tracking_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1A1A1A"
+                    android:letterSpacing="0.02"
+                    tools:text="TRK-789456123"/>
+
+                <TextView
+                    android:id="@+id/tv_order_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#757575"
+                    android:layout_marginTop="2dp"
+                    tools:text="ORD-20250729-180257"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:background="@drawable/status_background"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05"
+                tools:text="OUT FOR DELIVERY"/>
+        </LinearLayout>
+
+        <!-- Store Section with improved design -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#F8F9FA"
+            android:padding="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="40dp"
+                android:background="#4CAF50"
+                android:layout_marginEnd="12dp"/>
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_store"
+                android:layout_marginEnd="12dp"
+                android:tint="#4CAF50"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FROM"
+                    android:textSize="10sp"
+                    android:textColor="#9E9E9E"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
 
                 <TextView
                     android:id="@+id/tv_store_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
+                    android:textColor="#1A1A1A"
+                    android:layout_marginTop="2dp"
                     tools:text="FashionHub Store"/>
 
                 <TextView
                     android:id="@+id/tv_store_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="#757575"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    tools:text="123 Mall Street, Retail District"/>
+                    android:layout_marginTop="1dp"
+                    tools:text="Contact: 0913122224"/>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Arrow Divider -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingVertical="4dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_down"
-                />
-        </LinearLayout>
-
-        <!-- Customer Details -->
+        <!-- Arrow with improved design -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="4dp"
-            android:paddingBottom="8dp">
+            android:gravity="center"
+            android:paddingVertical="8dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="#E0E0E0"/>
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_down"
+
+                android:padding="8dp"
+                android:layout_marginHorizontal="12dp"
+                android:tint="#FF5722"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:background="#E0E0E0"/>
+        </LinearLayout>
+
+        <!-- Customer Section with improved design -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFF3E0"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="40dp"
+                android:background="#FF5722"
+                android:layout_marginEnd="12dp"/>
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/ic_home"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="12dp"
+                android:tint="#FF5722"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -122,94 +188,140 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TO"
+                    android:textSize="10sp"
+                    android:textColor="#9E9E9E"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
                     android:id="@+id/tv_customer_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="14sp"
-                    tools:text="John Smith"/>
+                    android:textSize="15sp"
+                    android:textColor="#1A1A1A"
+                    android:layout_marginTop="2dp"
+                    tools:text="John Michael Domingo"/>
 
                 <TextView
                     android:id="@+id/tv_customer_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textColor="#757575"
                     android:maxLines="2"
                     android:ellipsize="end"
+                    android:layout_marginTop="1dp"
                     tools:text="456 Residential Ave, Apt 3B, City Center"/>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="8dp"
-            android:background="#EEEEEE"/>
-
-        <!-- Metadata Section -->
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="3"
-            android:alignmentMode="alignMargins"
-            android:columnOrderPreserved="false"
-            android:useDefaultMargins="true">
-
-            <!-- Scan Time -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Scan Time:"
-                android:textColor="#9E9E9E"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/tv_scan_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                tools:text="Sep 15, 10:30 AM"/>
-
-            <!-- Estimated Delivery -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Est. Delivery:"
-                android:textColor="#9E9E9E"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/tv_estimated_delivery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                tools:text="Today by 6:00 PM"/>
-
-            <!-- Parcel Details -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parcel Details:"
-                android:textColor="#9E9E9E"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/tv_parcel_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                tools:text="2 items, 1.2kg"/>
-        </GridLayout>
-
-        <!-- Scan Events Accordion -->
+        <!-- Metadata Section with improved grid -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="12dp">
+            android:background="#FAFAFA"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- First Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SCAN TIME"
+                        android:textColor="#9E9E9E"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tv_scan_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="#1A1A1A"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        tools:text="Aug 5, 1:07 AM"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EST. DELIVERY"
+                        android:textColor="#9E9E9E"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tv_estimated_delivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="#1A1A1A"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp"
+                        tools:text="Today by 6:00 PM"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Second Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PARCEL DETAILS"
+                    android:textColor="#9E9E9E"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:id="@+id/tv_parcel_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#1A1A1A"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
+                    tools:text="2 items, ₱844.35"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Scan Events Accordion with improved design -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <!-- Accordion Header -->
             <LinearLayout
@@ -218,29 +330,58 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="?attr/selectableItemBackground"
-                android:padding="12dp"
+                android:padding="16dp"
                 android:gravity="center_vertical">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_history" />
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
 
-                <TextView
-                    android:id="@+id/tv_latest_event"
+                    android:gravity="center"
+                    android:layout_marginEnd="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_history"
+                        android:tint="#2196F3"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:textSize="14sp"
-                    tools:text="Scanned at Warehouse, Sep 15, 10:30 AM" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TRACKING HISTORY"
+                        android:textSize="10sp"
+                        android:textColor="#9E9E9E"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tv_latest_event"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#1A1A1A"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        tools:text="Package is out for delivery - Caloocan, Koronadal"/>
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/iv_expand_collapse"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_expand_more" />
+                    android:src="@drawable/ic_expand_more"
+                    android:tint="#757575"
+                    android:layout_marginStart="8dp"/>
             </LinearLayout>
 
             <!-- Events List (initially hidden) -->
@@ -250,31 +391,56 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:padding="8dp">
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
 
-
+                <!-- Header for events -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="8dp"
+                    android:background="#F5F5F5">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sep 15, 10:30 AM"
-                        android:textSize="12sp"/>
+                        android:layout_weight="1.5"
+                        android:text="TIME"
+                        android:textSize="10sp"
+                        android:textColor="#9E9E9E"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Warehouse Facility"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
+                        android:text="LOCATION"
+                        android:textSize="10sp"
+                        android:textColor="#9E9E9E"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:text="STATUS"
+                        android:textSize="10sp"
+                        android:textColor="#9E9E9E"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"/>
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Events will be added dynamically here -->
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

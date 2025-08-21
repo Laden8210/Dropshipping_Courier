@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class SessionManager {
 
     private static final String TAG = SessionManager.class.getSimpleName();
-    private static final String PREF_NAME = "SamahangNayon";
+    private static final String PREF_NAME = "DropShippingCourier";
     private static final String TOKEN = "token";
     private static final String IS_VERIFIED = "is_verified";
 

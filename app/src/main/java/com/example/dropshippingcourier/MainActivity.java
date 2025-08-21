@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.example.dropshippingcourier.CaptureActivityPortrait;
 import com.example.dropshippingcourier.api.PostCallback;
 import com.example.dropshippingcourier.api.PostTask;
+import com.example.dropshippingcourier.util.Messenger;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -56,11 +57,14 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import com.example.dropshippingcourier.util.JsonParserHelper;
+
+import com.example.dropshippingcourier.util.SessionManager;
 
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
     private ParcelAdapter adapter;
@@ -89,24 +93,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        setupChipGroup();
-//        setupRecyclerView();
-//        setupSwipeRefresh();
+        setupRecyclerView();
+        setupSwipeRefresh();
             setupScanButton();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-    private void setupChipGroup() {
-        ChipGroup chipGroup = findViewById(R.id.chip_group);
-        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (!checkedIds.isEmpty()) {
-                Chip chip = group.findViewById(checkedIds.get(0));
-                currentStatus = chip.getText().toString();
-                filterParcelsByStatus(currentStatus);
-            }
-        });
-    }
 
     private void filterParcelsByStatus(String status) {
         List<Parcel> filteredList = new ArrayList<>();
@@ -119,29 +112,63 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-//        recyclerView = findViewById(R.id.rv_scanned_items);
-//
-//        List<ScanEvent> scanEvents = new ArrayList<>();
-//        scanEvents.add(new ScanEvent("2023-10-01 12:00", "Store A", "Your parcel is ready for pickup"));
-//        scanEvents.add(new ScanEvent("2023-10-02 14:00", "Warehouse B", "Parcel is in transit"));
-//
-//        parcelList.add(new Parcel("123456789", "Pending", "2023-10-01 12:00",
-//                "Store A", "123 Store St", "John Doe", "456 Customer Rd",
-//                "2023-10-05", 2, "1.5kg", scanEvents));
-//
-//        parcelList.add(new Parcel("987654321", "In Transit", "2023-10-02 14:00",
-//                "Store B", "789 Store Ave", "Jane Smith", "321 Customer Ln",
-//                "2023-10-06", 1, "2.0kg", scanEvents));
-//
-//        parcelList.add(new Parcel("456789123", "Out for Delivery", "2023-10-03 16:00",
-//                "Store C", "456 Store Blvd", "Alice Johnson", "654 Customer St",
-//                "2023-10-07", 3, "0.5kg", scanEvents));
-//
-//        adapter = new ParcelAdapter(parcelList);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(adapter);
-    }
+        recyclerView = findViewById(R.id.rv_scanned_items);
 
+        // Initialize empty parcelList
+        parcelList = new ArrayList<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject();
+
+            new PostTask(this, new PostCallback() {
+                @Override
+                public void onPostSuccess(String responseData) {
+                    Log.d("MainActivity", "Post success: " + responseData);
+
+                    // Parse the JSON response using the helper
+                    List<Parcel> parsedParcels = JsonParserHelper.parseParcelResponse(responseData);
+
+                    // Update the parcel list
+                    parcelList.clear();
+                    parcelList.addAll(parsedParcels);
+
+                    // Notify adapter of data change
+                    if (adapter != null) {
+                        adapter.updateList(parcelList);
+                    } else {
+                        // If adapter not created yet, create it
+                        adapter = new ParcelAdapter(parcelList);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        recyclerView.setAdapter(adapter);
+                    }
+
+                    Log.d("MainActivity", "Loaded " + parcelList.size() + " parcels");
+                }
+
+                @Override
+                public void onPostError(String errorMessage) {
+                    Log.e("MainActivity", "Post error: " + errorMessage);
+                    Toast.makeText(MainActivity.this, "Failed to load parcels: " + errorMessage, Toast.LENGTH_SHORT).show();
+
+                    // Create adapter with empty list on error
+                    if (adapter == null) {
+                        adapter = new ParcelAdapter(parcelList);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+            }, "Loading parcels...", "courier/get-all-shipment.php").execute(jsonObject);
+
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error initializing parcel list", e);
+            Toast.makeText(this, "Error initializing app", Toast.LENGTH_SHORT).show();
+
+            // Create adapter with empty list on exception
+            adapter = new ParcelAdapter(parcelList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+        }
+    }
     private void setupSwipeRefresh() {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -151,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshData() {
-        // In a real app, this would fetch new data from server
-        Toast.makeText(this, "Data refreshed", Toast.LENGTH_SHORT).show();
+
+        setupRecyclerView();
+
     }
 
     private void setupScanButton() {
@@ -282,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onPostError(String errorMessage) {
-                    Log.e("POST ERROR", "Post error: " + errorMessage);
+                Log.e("MainActivity", "Post error: " + errorMessage);
                     Toast.makeText(MainActivity.this, "Failed to update scan", Toast.LENGTH_SHORT).show();
                 }
             }, "error message", "courier/save_shippping_status.php").execute(jsonObject);
@@ -291,8 +319,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e("JSON ERROR", "Error creating JSON", e);
         }
 
-//        adapter.notifyDataSetChanged();
-        //filterParcelsByStatus(currentStatus);
+        adapter.notifyDataSetChanged();
+        filterParcelsByStatus(currentStatus);
     }
     private boolean checkLocationPermission() {
         return ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
@@ -317,11 +345,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
-
 
     private void showSocAddressDialog() {
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_soc_address, null);
@@ -350,9 +373,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        // In a real app, this would clear session and go to login
-        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
-        finish();
+        Messenger.showAlertDialog(this, "Logout", "Are you sure you want to logout?", "Yes", "No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                SessionManager.getInstance(MainActivity.this).clear();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+
     }
 
     @Override
@@ -364,11 +401,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_profile) {
-            showSocAddressDialog();
-            return true;
-        } else if (id == R.id.action_logout) {
+//
+//        if (id == R.id.action_profile) {
+//            showSocAddressDialog();
+//            return true;
+//        } else
+            if (id == R.id.action_logout) {
             logout();
             return true;
         } else if (id == R.id.action_clear) {
